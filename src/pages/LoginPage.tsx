@@ -1,10 +1,15 @@
 ﻿import {useState } from 'react';
 import * as React from "react";
+import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
+    const loginMutation = useLogin();
     
     function handleSubmit(e: React.SubmitEvent<HTMLFormElement>)
     {
@@ -15,6 +20,18 @@ export default function LoginPage() {
             setError('username and password are required.');
             return;
         }
+        
+        loginMutation.mutate(
+            {username, password},
+            {
+                onSuccess: () => {
+                    navigate('/');
+                },
+                onError: () => {
+                    setError('Login failed. Check your credentials.')
+                }
+            }
+        )
         
         console.log('Would log in as:', { username, password });
     }
@@ -31,6 +48,7 @@ export default function LoginPage() {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         autoComplete="username"
+                        disabled={loginMutation.isPending}
                     />
                 </div>
 
@@ -42,6 +60,7 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         autoComplete="current-password"
+                        disabled={loginMutation.isPending}
                     />
                 </div>
 
@@ -49,7 +68,9 @@ export default function LoginPage() {
                     <div style={{ color: 'red', marginBottom: '0.75rem' }}>{error}</div>
                 )}
 
-                <button type="submit">Log in</button>
+                <button type="submit" disabled={loginMutation.isPending}>
+                    {loginMutation.isPending ? 'Logging in…' : 'Log in'}
+                </button>
             </form>
         </div>
     );
