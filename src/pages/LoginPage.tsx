@@ -1,39 +1,40 @@
-﻿import {useState } from 'react';
-import * as React from "react";
-import { useNavigate } from 'react-router-dom';
+﻿import { useState, type SubmitEvent } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
+import { useAuth } from '../auth/AuthContext';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const navigate = useNavigate();
+    const { user, login } = useAuth();
     const loginMutation = useLogin();
-    
-    function handleSubmit(e: React.SubmitEvent<HTMLFormElement>)
-    {
+
+    if (user) {
+        return <Navigate to="/" replace />;
+    }
+
+    function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
         e.preventDefault();
         setError('');
-        
+
         if (!username || !password) {
-            setError('username and password are required.');
+            setError('Username and password are required.');
             return;
         }
-        
+
         loginMutation.mutate(
-            {username, password},
+            { username, password },
             {
-                onSuccess: () => {
-                    navigate('/');
+                onSuccess: (data) => {
+                    login(data.token);
                 },
                 onError: () => {
-                    setError('Login failed. Check your credentials.')
-                }
+                    setError('Login failed. Check your credentials.');
+                },
             }
-        )
-        
-        console.log('Would log in as:', { username, password });
+        );
     }
 
     return (
