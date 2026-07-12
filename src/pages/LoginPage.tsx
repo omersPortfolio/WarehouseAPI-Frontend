@@ -38,11 +38,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div style={{ maxWidth: '20rem' }}>
+        <div className="form">
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '0.75rem' }}>
-                    <label htmlFor="username" style={{ display: 'block' }}>Username</label>
+                <div className="form-field">
+                    <label htmlFor="username">Username</label>
                     <input
                         id="username"
                         type="text"
@@ -53,8 +53,8 @@ export default function LoginPage() {
                     />
                 </div>
 
-                <div style={{ marginBottom: '0.75rem' }}>
-                    <label htmlFor="password" style={{ display: 'block' }}>Password</label>
+                <div className="form-field">
+                    <label htmlFor="password">Password</label>
                     <input
                         id="password"
                         type="password"
@@ -65,11 +65,9 @@ export default function LoginPage() {
                     />
                 </div>
 
-                {error && (
-                    <div style={{ color: 'red', marginBottom: '0.75rem' }}>{error}</div>
-                )}
+                {error && <div className="form-error">{error}</div>}
 
-                <button type="submit" disabled={loginMutation.isPending}>
+                <button type="submit" className="primary" disabled={loginMutation.isPending}>
                     {loginMutation.isPending ? 'Logging in…' : 'Log in'}
                 </button>
             </form>

@@ -18,21 +18,20 @@ export default function DashboardPage() {
     }
 
     if (isError) {
-        return (
-            <div style={{ color: 'red' }}>
-                Error: {(error as Error).message}
-            </div>
-        );
+        return <div className="form-error">Error: {(error as Error).message}</div>;
     }
 
     return (
         <div>
             <h1>Dashboard</h1>
             <p>{data?.length ?? 0} product(s) in the warehouse.</p>
-            <ul>
+            <ul className="products">
                 {data?.map((product) => (
                     <li key={product.id}>
-                        <strong>{product.name}</strong> - ${product.price} ({product.stockQuantity} in stock)
+                        <span className="product-name">{product.name}</span>
+                        <span className="product-meta">
+                            ${product.price} · {product.stockQuantity} in stock
+                        </span>
                     </li>
                 ))}
             </ul>

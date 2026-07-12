@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
@@ -9,42 +9,21 @@ import OrdersListPage from './pages/OrdersListPage';
 
 function App() {
     const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    function handleLogout() {
-        logout();
-        navigate('/login');
-    }
 
     return (
         <div>
-            <nav
-                style={{
-                    display: 'flex',
-                    gap: '1rem',
-                    padding: '1rem',
-                    borderBottom: '1px solid #ccc',
-                    alignItems: 'center',
-                }}
-            >
+            <nav className="nav">
                 <Link to="/">Dashboard</Link>
                 <Link to="/products">Products</Link>
                 <Link to="/orders">Orders</Link>
 
-                <span
-                    style={{
-                        marginLeft: 'auto',
-                        display: 'flex',
-                        gap: '1rem',
-                        alignItems: 'center',
-                    }}
-                >
+                <span className="nav-user">
                     {user ? (
                         <>
                             <span>
                                 {user.username} ({user.role})
                             </span>
-                            <button type="button" onClick={handleLogout}>
+                            <button type="button" onClick={logout}>
                                 Log out
                             </button>
                         </>
@@ -54,7 +33,7 @@ function App() {
                 </span>
             </nav>
 
-            <main style={{ padding: '1rem' }}>
+            <main className="main">
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
